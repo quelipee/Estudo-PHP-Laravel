@@ -1006,10 +1006,10 @@ if (password_verify($password_to_check, $hashed_password)) {
 require_once __DIR__ . "/vendor/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-$api_key =  'hkfLLDoixF47tsGqLI3tlaUo8';
-$api_key_secret = 'rE6lLVsJFVs57WzUzNvM6IcU63XjGZm5GhxmT2bPl3qm5KQt6p';
-$token = '2305505167-iGYApiKWTNHTaBCbWjnB9dpZ6DJSrpaNoOYEB5N';
-$token_secret = 'vXDy1PQwtSZLiqSjOz8blYfRxyfGnpu8xnRcfoTbmw0Sl';
+$api_key =  'YOUR API KEY';
+$api_key_secret = 'YOUR API KEY SECRET';
+$token = 'YOUR TOKEN';
+$token_secret = 'YOUR TOKEN SECRET';
 define('CONSUMER_KEY',$api_key);
 define('CONSUMER_SECRET',$api_key_secret);
 define('ACCESS_TOKEN',$token);
