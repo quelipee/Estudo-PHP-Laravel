@@ -72,8 +72,8 @@ php artisan env:encrypt
 
 - resultado:
 ````php
- Key ................................... base64:LSB4/YrVDQmoPgsMOxGQOuUNTKll+IZTM78lOiid0tE=
- Cipher ........................................................................ AES-256-CBC
+ Key ....................................................................... base64:YOURKEY=
+ Cipher ............................................................................. Cipher
  Encrypted file ........................................... C:\laravel\estudo\.env.encrypted
   ````
 
