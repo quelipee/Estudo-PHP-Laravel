@@ -931,7 +931,7 @@ $password_hash = password_hash($password, PASSWORD_BCRYPT, $options);
 ````php
 $options = [
     'cost' => 15,
-    'memory_cost' => 1<<17,
+    'memory_cost' => 1<<17, 
     'threads' => 3,
 ];
 $password = "mypassword";
@@ -970,3 +970,58 @@ if (password_verify($password_to_check, $hashed_password)) {
 <p>Neste exemplo, a primeira linha criptografa a senha fornecida e armazena o hash criptografado na variável $hashed_password. Em seguida, uma senha é fornecida para ser verificada ( $password_to_check ) e comparada com o hash armazenado ( $hashed_password ). Se as senhas corresponderem, a condição dentro do if será executada. Caso contrário, a condição no else será executada.<p/>
 
 <p>Não armazene a senha em texto claro. Ao invés disso, armazene o hash da senha no banco de dados e use a função password_verify() para comparar a senha digitada com o hash armazenado.<p/>
+
+--- 
+
+<br>
+
+## **Require_once**
+
+<br>require_once é uma instrução no PHP que é usada para incluir e executar um arquivo em outro arquivo. Ele é semelhante a require, mas tem a adição de que ele só incluirá o arquivo uma vez, mesmo que ele seja incluído várias vezes.<p/>
+
+<br>Quando você usa require_once em um arquivo, o PHP verifica se o arquivo já foi incluído. Se ele já foi incluído, o PHP não o incluirá novamente e seguirá com a execução do código. Se ele ainda não foi incluído, o PHP incluirá o arquivo e executará o código nele. Isso é útil quando você tem vários arquivos que precisam ser incluídos em vários lugares, mas você não quer incluí-los várias vezes, pois isso poderia causar problemas de conflito de funções ou variáveis.<p/>
+
+<p>É importante notar que, se o arquivo não for encontrado, o PHP lançará uma exceção "PHP Fatal error: require_once(): Failed opening required" e interrompera a execução do script.<p/>
+
+---
+
+<br>
+
+## **Funções sobre a api do twitter**
+
+````
+"statuses/update": permite postar um novo tweet.
+"statuses/mentions_timeline": retorna tweets que mencionam o usuário autenticado.
+"statuses/user_timeline": retorna tweets publicados pelo usuário especificado.
+"users/show": retorna informações do perfil de um usuário específico.
+"direct_messages/events/list": retorna mensagens diretas enviadas e recebidas pelo usuário autenticado.
+"friendships/lookup": retorna dados de relacionamento entre usuários específicos.
+"friends/ids": retorna os IDs dos amigos de um usuário específico.
+````
+
+<p>Essas são apenas algumas das opções disponíveis. A documentação da API do Twitter fornece uma lista completa de todos os endpoints disponíveis, bem como as informações necessárias para usá-los.<p/>
+
+### **Exemplo de uma api onde busca os 10 tweets recentes da time line**
+````php
+require_once __DIR__ . "/vendor/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+$api_key =  'hkfLLDoixF47tsGqLI3tlaUo8';
+$api_key_secret = 'rE6lLVsJFVs57WzUzNvM6IcU63XjGZm5GhxmT2bPl3qm5KQt6p';
+$token = '2305505167-iGYApiKWTNHTaBCbWjnB9dpZ6DJSrpaNoOYEB5N';
+$token_secret = 'vXDy1PQwtSZLiqSjOz8blYfRxyfGnpu8xnRcfoTbmw0Sl';
+define('CONSUMER_KEY',$api_key);
+define('CONSUMER_SECRET',$api_key_secret);
+define('ACCESS_TOKEN',$token);
+define('ACCESS_TOKEN_SECRET',$token_secret);
+
+$conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+$user_timeline = $conn->get("statuses/home_timeline", ["count" => 10]);//ver os ultimos tweets da time line
+foreach ($user_timeline as $tweet) {
+    echo "nome do usuario: " . $tweet->user->name . $tweet->text . "\n";
+}
+````
+### **Saida**
+!['twitter api'](./storage/twitterapi.png)
+
+---
