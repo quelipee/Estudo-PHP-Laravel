@@ -197,6 +197,24 @@ Finalmente, uma vez que a resposta viaja de volta pelo middleware, o método han
 
 ---
 
+### No Laravel, existem alguns middlewares pré-definidos que você pode usar para implementar certas funcionalidades em sua aplicação. Alguns dos middlewares pré-definidos incluem:
+
+- <p>web: Este middleware é aplicado a todas as rotas que precisam de suporte para sessão e autenticação.<p/>
+
+- <p>api: Este middleware é aplicado a todas as rotas que precisam de suporte para autenticação e tokens de acesso.<p/>
+
+- <p>auth: Este middleware é usado para proteger rotas que precisam de autenticação. Ele verifica se o usuário está autenticado e, se não estiver, redireciona-o para a tela de login.<p/>
+
+- <p>guest: Este middleware é usado para proteger rotas que só devem ser acessadas por usuários não autenticados. Ele verifica se o usuário está autenticado e, se estiver, redireciona-o para a home page ou outra rota específica.<p/>
+
+- <p>verified: Este middleware é usado para proteger rotas que só devem ser acessadas por usuários que já verificaram seu endereço de e-mail.<p/>
+
+- <p>throttle: Este middleware é usado para limitar o número de solicitações que um usuário ou IP pode fazer dentro de um determinado período de tempo.<p/>
+
+- <p>Esses são apenas alguns exemplos dos middlewares pré-definidos que estão disponíveis no Laravel, existem muitos outros que você pode usar dependendo das necessidades da sua aplicação.<p/>
+
+---
+
 ## **Criando um 'Hello World' via rota**
 
 
@@ -1025,3 +1043,188 @@ foreach ($user_timeline as $tweet) {
 !['twitter api'](./storage/twitterapi.png)
 
 ---
+
+## **Enums**
+
+Em PHP Laravel, um Enum (ou enumeração) é um conjunto de constantes nomeadas que representam valores possíveis para um determinado tipo de dados. Em outras palavras, um Enum permite que você defina um conjunto limitado de valores que um atributo pode ter.
+
+Por exemplo, você pode criar um Enum para representar os dias da semana, onde cada dia é uma constante nomeada com um valor inteiro associado:
+
+````php
+<?php
+
+namespace App\Enums;
+
+class Weekday {
+  const MONDAY = 1;
+  const TUESDAY = 2;
+  const WEDNESDAY = 3;
+  const THURSDAY = 4;
+  const FRIDAY = 5;
+  const SATURDAY = 6;
+  const SUNDAY = 7;
+}
+````
+
+Em seguida, você pode usar essa enumeração em outros lugares do seu código para 
+representar dias da semana, como em um objeto DTO, em um modelo Eloquent ou em uma 
+tabela do banco de dados.
+
+Os Enums podem ajudar a tornar o seu código mais legível e menos propenso a erros, 
+pois limitam o conjunto de valores que um atributo pode ter.
+
+
+### **Outros exemplos sobre Enums**
+
+Em PHP Laravel, um enum é um tipo de classe que representa um conjunto finito de 
+valores possíveis. É semelhante a um conjunto de constantes nomeadas, em que cada 
+constante tem um valor associado. No entanto, os enums são geralmente mais fáceis de 
+usar e manter do que as constantes nomeadas. Isso ocorre porque os enums permitem que você defina um conjunto predefinido de valores possíveis, e também oferecem métodos úteis para trabalhar com esses valores, como a verificação se um valor específico está presente no conjunto, ou a obtenção de uma lista de todos os valores possíveis.
+
+Por exemplo, um enum de cores pode ser definido como:
+
+
+````php
+enum Color {
+RED,
+GREEN,
+BLUE
+}
+````
+A partir daí, você pode usar os valores definidos em qualquer lugar em que precise 
+especificar uma cor, como em uma variável ou em um parâmetro de função. Além disso, 
+você pode usar métodos do enum, como Color::RED() para obter o valor correspondente à 
+constante nomeada. Isso torna o código mais fácil de ler e entender, além de reduzir 
+o risco de erros de digitação em constantes nomeadas.
+
+---
+
+## **$casts**
+
+Em Laravel, a propriedade $casts em um modelo é usada para especificar como as 
+colunas do banco de dados devem ser convertidas para tipos específicos ao serem 
+atribuídas aos atributos do modelo.
+
+Por exemplo, se você tem uma coluna chamada is_admin que é do tipo boolean no 
+banco de dados, mas deseja acessá-la como um valor booleano em seu modelo, você 
+pode especificar a conversão no $casts da seguinte maneira:
+
+
+````php
+protected $casts = [
+'is_admin' => 'boolean',
+];
+````
+Isso permite que você acesse o valor da coluna como um booleano em vez de uma string, 
+por exemplo:
+
+
+
+````php
+if ($user->is_admin) {
+// ...
+}
+````
+Os tipos suportados para conversão incluem: integer, real, float, double, decimal:<digits>, string, boolean, object, array, collection, date, datetime, timestamp.
+
+Além disso, você também pode especificar uma classe de casting personalizada que implementa a interface Illuminate\Contracts\Database\Eloquent\CastsAttributes, permitindo que você implemente uma lógica personalizada de conversão.
+
+---
+
+### **Tap**
+
+O método tap é uma função do Laravel que permite você executar uma ação em um 
+objeto sem alterar o seu estado. Ela recebe dois parâmetros: o objeto que você 
+quer "tampar" e uma função que vai executar a ação desejada no objeto.
+
+Por exemplo, imagine que você tem um objeto $user e quer mudar o seu nome para 
+"Fulano". Em vez de fazer isso assim:
+
+
+
+````php
+$user->name = "Fulano";
+````
+Você pode usar o tap para executar a ação e continuar com o objeto original 
+sem precisar armazenar o resultado em uma nova variável:
+
+
+
+````php
+tap($user, function ($user) {
+$user->name = "Fulano";
+});
+````
+Essa função é especialmente útil em cadeias de métodos, onde você quer executar 
+uma ação em um objeto antes de passá-lo para o próximo método.
+
+<br>
+
+---
+
+## **Function Static**
+
+<p>Uma função estática em PHP é uma função que pode ser chamada sem precisar criar uma instância da classe à qual ela pertence.
+
+Normalmente, quando você quer usar uma função que foi definida em uma classe, primeiro precisa criar uma instância dessa classe e, em seguida, chamar a função usando essa instância.
+
+Mas com uma função estática, você pode chamar a função diretamente, sem precisar criar uma instância da classe. É como uma função global que está vinculada a uma classe específica.
+
+Por exemplo, se você tiver uma classe chamada Exemplo, com uma função estática chamada funcStatica, você pode chamar essa função assim: Exemplo::funcStatica();.</p>
+
+<br>
+
+### **Outra exemplo sobre Function Static**
+
+<p>Uma função estática, em PHP, é uma função que pode ser chamada sem precisar criar um objeto da classe em que ela está definida. Ou seja, ela pertence à classe e não a uma instância da classe.
+
+Diferentemente das funções comuns, as funções estáticas não podem acessar propriedades e métodos não estáticos da classe. Além disso, elas não têm acesso ao $this, que é uma referência ao objeto atual da classe.
+
+Para chamá-las, basta utilizar o nome da classe seguido pelo nome da função. Por exemplo, se você tem uma classe chamada Calculadora com uma função estática chamada soma, você pode chamá-la da seguinte forma: Calculadora::soma(2, 3).</p>
+
+---
+
+## **OQUE É DTO**
+
+<p>DTO é uma sigla em inglês para Data Transfer Object, que em português significa Objeto de Transferência de Dados. É uma classe que tem como objetivo transportar dados entre diferentes camadas de uma aplicação, por exemplo, do banco de dados para a camada de apresentação.
+
+Para entender melhor, podemos imaginar uma loja virtual que precisa mostrar informações de um produto para o usuário. Essas informações podem estar armazenadas no banco de dados em uma tabela "produtos". Porém, quando o usuário acessa a página de detalhes do produto, essas informações precisam ser exibidas em um formato legível e organizado.
+
+É aí que entra o DTO. Ele é responsável por transportar as informações do produto do banco de dados para a camada de apresentação, fazendo a organização e adaptação necessárias para que as informações sejam exibidas de forma adequada.
+
+Um DTO pode conter apenas os atributos necessários para a transferência dos dados, sem incluir métodos ou comportamentos complexos. Ele é uma classe simples, que tem como objetiv
+o facilitar a comunicação entre as camadas de uma aplicação.</p>
+
+<br>
+
+### **Outro exemplo**
+<p>Imagine que você tem um monte de objetos diferentes, cada um com suas próprias informações, como nome, idade, e-mail e telefone. Agora imagine que você precisa enviar essas informações para outro sistema, talvez até mesmo em outro formato.
+
+Mas se você simplesmente enviasse todos esses objetos com suas informações, a outra parte teria que entender e manipular cada um individualmente. Isso pode ser complicado e demorado.
+
+É aí que entra o DTO (Data Transfer Object). Ele é um objeto que agrupa essas informações e as organiza de uma maneira mais simples e fácil de entender. Em vez de enviar todos os objetos, você pode enviar um único DTO que contém todos os dados necessários.
+
+O DTO é muito útil em situações em que você precisa transferir dados entre diferentes partes do sistema ou mesmo entre diferentes sistemas. Ele pode ajudar a simplificar o processo de transferência de dados e tornar as coisas mais fáceis para todos os envolvidos.</p>
+
+<br>
+
+---
+
+## **RESOURCE**
+
+<p>Em Laravel, Resource é uma classe que permite transformar dados de uma forma estruturada para serem enviados como resposta de uma API. O objetivo principal do Resource é padronizar a saída da API, para que os consumidores da API possam prever o formato da resposta e manipulá-lo de maneira adequada.
+
+O Resource define uma estrutura para os dados, permitindo que apenas as informações necessárias sejam retornadas. Ele também fornece a possibilidade de adicionar metadados aos dados, como links ou informações adicionais, para que os consumidores da API possam usá-los em suas aplicações.
+
+O Resource é criado como uma classe, que herda de JsonResource ou outras classes fornecidas pelo Laravel, e deve ser instanciado passando o modelo ou dados que serão transformados. A classe define o método toArray, que transforma os dados e retorna um array com os campos e valores a serem retornados.</p>
+
+<br>
+
+---
+## **DIFERENÇA ENTRE INSTANCIAR UMA CLASSE E ACESSAR ELA User() e User::**
+
+<p>new TrainerDTO() é usado para criar uma nova instância do objeto TrainerDTO, enquanto TrainerDTO:: é usado para chamar um método ou propriedade estática da classe TrainerDTO.
+
+Quando usamos new TrainerDTO(), estamos criando uma nova instância do objeto TrainerDTO que pode ser usada para armazenar dados específicos de um treinador. Podemos definir os valores dos atributos da instância criada, passando os valores para o construtor da classe.
+
+Por outro lado, quando usamos TrainerDTO::, estamos acessando um método ou propriedade estática da classe TrainerDTO. Esses métodos e propriedades estão disponíveis sem que seja necessário criar uma instância da classe. Isso pode ser útil quando queremos chamar um método ou acessar uma propriedade que não depende de uma instância específica do objeto TrainerDTO.</p>
