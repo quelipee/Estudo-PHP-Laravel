@@ -1228,3 +1228,164 @@ O Resource é criado como uma classe, que herda de JsonResource ou outras classe
 Quando usamos new TrainerDTO(), estamos criando uma nova instância do objeto TrainerDTO que pode ser usada para armazenar dados específicos de um treinador. Podemos definir os valores dos atributos da instância criada, passando os valores para o construtor da classe.
 
 Por outro lado, quando usamos TrainerDTO::, estamos acessando um método ou propriedade estática da classe TrainerDTO. Esses métodos e propriedades estão disponíveis sem que seja necessário criar uma instância da classe. Isso pode ser útil quando queremos chamar um método ou acessar uma propriedade que não depende de uma instância específica do objeto TrainerDTO.</p>
+
+---
+
+<br>
+
+# Relações Polimórficas
+
+Configuração dos modelos:
+
+Modelo Post:
+````php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+}
+````
+Modelo Comment:
+
+````php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Comment extends Model
+{
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+}
+````
+Modelo Image:
+
+````php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Image extends Model
+{
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+}
+````
+Migrações:
+Certifique-se de que você tenha as migrações para criar as tabelas relacionadas ao Post, Comment e Image. A tabela comments deve ter os campos commentable_id, commentable_type, e outros campos necessários para os comentários.
+
+Uso das relações:
+Agora você pode utilizar as relações polimórficas em seus controladores ou em outras partes do seu código.
+
+Exemplo de criação de um novo comentário para um post:
+
+````php
+$post = Post::find(1);
+$comment = new Comment();
+$comment->content = 'Novo comentário para o post';
+$post->comments()->save($comment);
+````
+
+Exemplo de criação de um novo comentário para uma imagem:
+
+````php
+$image = Image::find(1);
+$comment = new Comment();
+$comment->content = 'Novo comentário para a imagem';
+$image->comments()->save($comment);
+````
+
+Exemplo de obtenção dos comentários de um post:
+
+````php
+$post = Post::find(1);
+$comments = $post->comments;
+````
+Exemplo de obtenção dos comentários de uma imagem:
+
+````php
+$image = Image::find(1);
+$comments = $image->comments;
+````
+Dessa forma, você pode criar relações polimórficas no Laravel, permitindo que um modelo possa ter comentários de diferentes tipos de entidades.
+
+<br>
+
+##  função morphMany 
+
+<p>
+A função morphMany é uma função do Laravel que permite estabelecer uma relação "um para muitos" polimórfica entre dois modelos. Isso significa que um modelo pode ter várias instâncias de outro modelo associado a ele, mas essas instâncias podem pertencer a diferentes tipos de modelos.
+
+Por exemplo, vamos considerar os modelos User e Comment. Cada usuário pode ter vários comentários, mas esses comentários podem ser feitos em diferentes tipos de entidades, como Post, Image, etc.
+
+Ao usar a função morphMany, você está dizendo que um modelo pode ter várias instâncias de outro modelo associado a ele, identificando o tipo de entidade por meio de uma coluna chamada commentable_type e o ID da entidade relacionada por meio de uma coluna chamada commentable_id.
+
+Simplificando, a função morphMany permite definir uma relação "um para muitos" polimórfica, onde um modelo pode ter vários outros modelos associados a ele, mas esses modelos podem pertencer a diferentes tipos de entidades.
+</p>
+
+## Exemplos 
+
+Exemplo de morphMany:
+Suponha que temos três modelos: User, Post e Comment, onde tanto um usuário quanto um post podem ter vários comentários. Veja como ficaria a implementação:
+
+Migration para a tabela de comentários (comments):
+````php
+Schema::create('comments', function (Blueprint $table) {
+    $table->id();
+    $table->text('content');
+    $table->unsignedBigInteger('commentable_id');
+    $table->string('commentable_type');
+    $table->timestamps();
+});
+````
+
+Modelo User:
+````php
+class User extends Model
+{
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+}
+````
+
+Modelo Post:
+````php
+class Post extends Model
+{
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+}
+````
+
+Utilizando a relação morphMany:
+````php
+$user = User::find(1);
+$comments = $user->comments;
+
+$post = Post::find(1);
+$comments = $post->comments;
+````
+
+Nesse exemplo, ao acessar a relação $user->comments ou $post->comments, obteremos todos os comentários associados ao usuário ou ao post, respectivamente. A diferença está no fato de que a coluna commentable_type será preenchida com o tipo do modelo relacionado (User ou Post) e a coluna commentable_id será preenchida com o ID correspondente.
+
+Esses são apenas exemplos básicos para ilustrar o uso das relações hasMany e morphMany no Laravel. A implementação real pode variar dependendo das necessidades do seu projeto.
